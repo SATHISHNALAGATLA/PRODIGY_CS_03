@@ -1,0 +1,52 @@
+import re
+
+def check_password_strength(password):
+    # Initialize score and feedback
+    score = 0
+    feedback = []
+
+    # Criteria
+    criteria = {
+        'length': {'regex': '.{8,}', 'score': 1, 'feedback': 'Password should be at least 8 characters long.'},
+        'lowercase': {'regex': '[a-z]', 'score': 1, 'feedback': 'Password should contain at least one lowercase letter.'},
+        'uppercase': {'regex': '[A-Z]', 'score': 1, 'feedback': 'Password should contain at least one uppercase letter.'},
+        'digits': {'regex': '[0-9]', 'score': 1, 'feedback': 'Password should contain at least one digit.'},
+        'special_characters': {'regex': '[^a-zA-Z0-9]', 'score': 2, 'feedback': 'Password should contain at least one special character.'}
+    }
+
+    # Check each criteria
+    for key, value in criteria.items():
+        if re.search(value['regex'], password):
+            score += value['score']
+        else:
+            feedback.append(value['feedback'])
+
+    # Assess strength based on score
+    if score <= 2:
+        strength = 'Weak'
+    elif score <= 4:
+        strength = 'Moderate'
+    elif score <= 6:
+        strength = 'Strong'
+    else:
+        strength = 'Very Strong'
+
+    return strength, feedback
+
+def main():
+    print("Password Strength Checker")
+    print("-------------------------")
+    while True:
+        password = input("Enter a password to assess its strength (press Enter to exit): ")
+        if password == "":
+            break
+        strength, feedback = check_password_strength(password)
+        print(f"Password Strength: {strength}")
+        if feedback:
+            print("Feedback:")
+            for msg in feedback:
+                print(f"- {msg}")
+        print()
+
+if _name_ == "_main_":
+    main()
